@@ -40,21 +40,26 @@ const Autos = () => {
   <div class=" flex min-h-screen items-center justify-center px-16 ml-auto ">
  <div className='flex'>
  
-    {vehiculosFiltrados.length > 0 && (
-      <div className=' flex-col md:flex-row font-Tektur block '>
-        <div className='flex'><h1 className="whitespace-normal mt-4 text-5xl "> {vehiculosFiltrados[currentIndex].brand}     </h1>
-        <img
-                src={vehiculosFiltrados[currentIndex].logo}
-                alt={vehiculosFiltrados[currentIndex].model}
-                className="rounded-full w-40  bg-white mix-blend-multiply filter"
-                /></div>
-        
-        <div> <h1 className="whitespace-normal mt-4 text-2xl"> {vehiculosFiltrados[currentIndex].model} </h1>
-        </div>
-       
-        
-      </div>
-    )}
+ {vehiculosFiltrados.length > 0 && (
+  <div className='flex-col md:flex-row font-Tektur block'>
+    <div className='flex flex-col md:flex-row items-center'>
+      <h1 className="whitespace-normal mt-4 text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+        {vehiculosFiltrados[currentIndex].brand}
+      </h1>
+      <img
+        src={vehiculosFiltrados[currentIndex].logo}
+        alt={vehiculosFiltrados[currentIndex].model}
+        className="rounded-full w-20 md:w-40 bg-white mix-blend-multiply filter"
+      />
+    </div>
+    <div className="mt-4 md:ml-4">
+      <h1 className="whitespace-normal mt-4 text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+        {vehiculosFiltrados[currentIndex].model}
+      </h1>
+    </div>
+  </div>
+)}
+
    
     
 </div>

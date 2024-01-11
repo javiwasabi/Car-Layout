@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import ReactCardFlip from 'react-card-flip';
-import { RxDotFilled } from 'react-icons/rx';
 import { BsChevronCompactRight, BsChevronCompactLeft } from 'react-icons/bs';
 
 const Catalogo = () => {
@@ -8,10 +7,8 @@ const Catalogo = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
-
-  function flipCard(){
+  function flipCard() {
     setIsFlipped(!isFlipped);
-
   }
 
   useEffect(() => {
@@ -31,8 +28,6 @@ const Catalogo = () => {
     obtenerDatos();
   }, []);
 
- 
-
   const vehiculosFiltrados = vehiculos.filter(
     (vehiculo) => vehiculo.image && vehiculo.model && vehiculo.brand
   );
@@ -40,24 +35,22 @@ const Catalogo = () => {
   const itemsPerPage = 9;
   const totalPages = Math.ceil(vehiculosFiltrados.length / itemsPerPage);
 
-  const visiblePageIndexes = Array.from({ length: totalPages }).map((_, index) => index * itemsPerPage);
-
   return (
-    <div className="max-w-[1240px] mx-auto font-Tektur px-4 text-black">
+    <div className="max-w-[1240px] mx-auto font-Tektur px-4 text-black my-10">
       <h2 className="text-2xl my-4" id="catalog">
         Listado de vehículos
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shadow-xl relative">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 shadow-xl relative">
         {vehiculosFiltrados.slice(currentIndex, currentIndex + itemsPerPage).map((vehiculo, index) => (
           <ReactCardFlip
             key={vehiculo.model}
             flipDirection="horizontal"
             isFlipped={isFlipped}
           >
-            {/* Contenido frontal de la tarjeta */}
+     
             <div
-              className="card border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-10"
+              className="card border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-4"
               onClick={() => flipCard(index)}
             >
               <img
@@ -78,10 +71,9 @@ const Catalogo = () => {
               </div>
             </div>
 
-            {/* Contenido trasero de la tarjeta */}
             <div
-              className="card card-back border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-10"
-              onClick={() =>  flipCard(index)}
+              className="card card-back border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-4"
+              onClick={() => flipCard(index)}
             >
               <p className="text-sm mt-2"> Marca: {vehiculo.brand}</p>
               <p className="text-sm mt-2"> Modelo: {vehiculo.model}</p>
@@ -90,48 +82,43 @@ const Catalogo = () => {
             </div>
           </ReactCardFlip>
         ))}
-
       </div>
 
-       {/* Páginas */}
-       <div className="flex flex-wrap justify-center items-center mt-4 w-90%">
-    {/* Botón para retroceder una página */}
-    <div
-      className="text-2xl cursor-pointer mx-2 text-gray-500"
-      onClick={() => setCurrentIndex((prevIndex) => Math.max(0, prevIndex - 1))}
-    >
-      &lt; Anterior
-    </div>
-
-    {/* Páginas */}
-    {Array.from({ length: Math.ceil(vehiculosFiltrados.length / itemsPerPage) }).map(
-      (page, i) => (
-        <div
-          key={i}
-          onClick={() => setCurrentIndex(i * itemsPerPage)}
-          className={`text-2xl cursor-pointer mx-2 ${
-            i * itemsPerPage === currentIndex ? 'text-black' : 'text-gray-500'
-          }`}
-        >
-          {i + 1}
-        </div>
-      )
-    )}
-
-    {/* Botón para avanzar una página */}
-    <div
-      className="text-2xl cursor-pointer mx-2 text-gray-500"
-      onClick={() =>
-        setCurrentIndex((prevIndex) =>
-          Math.min(prevIndex + itemsPerPage, vehiculosFiltrados.length - itemsPerPage)
-        )
-      }
-    >
-      Siguiente &gt;
-    </div>
-  </div>
-
       
+      <div className="flex flex-wrap justify-center items-center mt-4">
+     
+        <div
+          className="text-2xl cursor-pointer mx-2 text-gray-500"
+          onClick={() => setCurrentIndex((prevIndex) => Math.max(0, prevIndex - itemsPerPage))}
+        >
+          &lt; Anterior
+        </div>
+
+     
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <div
+            key={i}
+            onClick={() => setCurrentIndex(i * itemsPerPage)}
+            className={`text-2xl cursor-pointer mx-2 ${
+              i * itemsPerPage === currentIndex ? 'text-black' : 'text-gray-500'
+            }`}
+          >
+            {i + 1}
+          </div>
+        ))}
+
+   
+        <div
+          className="text-2xl cursor-pointer mx-2 text-gray-500"
+          onClick={() =>
+            setCurrentIndex((prevIndex) =>
+              Math.min(prevIndex + itemsPerPage, vehiculosFiltrados.length - itemsPerPage)
+            )
+          }
+        >
+          Siguiente &gt;
+        </div>
+      </div>
     </div>
   );
 };
