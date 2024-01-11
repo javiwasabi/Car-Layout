@@ -1,23 +1,36 @@
 import logo from './logo.svg';
-import './App.css';
-
+import Buscador from './Components/buscador'
+import Navbar from './Components/navbar'
+import Autos from './Components/autos'
+import Catalogos from './Components/catalogo'
+import React, { useEffect, useState } from 'react';
 function App() {
+  const [navbarBackground, setNavbarBackground] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 100) {
+        setNavbarBackground(true);
+      } else {
+        setNavbarBackground(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className=" h-screen w-full " >
+        <nav className={`fixed w-full h-24 shadow-xl ${navbarBackground ? 'bg-white' : 'bg-solid-color'} z-50`}>
+      <Navbar/></nav>
+        
+        <Autos/>
+        <Catalogos/>
+    <div className='w-10 text-white '></div>
     </div>
   );
 }
