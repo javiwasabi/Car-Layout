@@ -1,5 +1,5 @@
 # Detalles a considerar del proyecto
-- tener instalado npm, React, tailwind 
+- Tener instalado npm, React, tailwind 
 - Tener instalado los siguientes paquetes: 
   - npm install react-scripts --save-dev
   - npm install react-card-flip
