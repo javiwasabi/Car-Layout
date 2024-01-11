@@ -1,3 +1,11 @@
+#Detalles a considerar del proyecto
+- tener instalado npm, React, tailwind 
+- Tener instalado los siguientes paquetes: 
+  - npm install react-scripts --save-dev
+  - npm install react-card-flip
+  - npm install react-scroll
+  - npm install react-router-dom
+  - npm install react-icons 
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
