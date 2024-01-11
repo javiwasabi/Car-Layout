@@ -6,6 +6,7 @@ const Autos = () => {
   const [vehiculos, setVehiculos] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   
+  
  
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? vehiculos.length - 1 : prevIndex - 1));
