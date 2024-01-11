@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import ReactCardFlip from 'react-card-flip';
 import { RxDotFilled } from 'react-icons/rx';
+import { BsChevronCompactRight, BsChevronCompactLeft } from 'react-icons/bs';
 
 const Catalogo = () => {
   const [vehiculos, setVehiculos] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? vehiculos.length - 1 : prevIndex - 1));
-  };
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === vehiculos.length - 1 ? 0 : prevIndex + 1));
-  };
+  function flipCard(){
+    setIsFlipped(!isFlipped);
+
+  }
 
   useEffect(() => {
     const obtenerDatos = async () => {
@@ -31,30 +31,34 @@ const Catalogo = () => {
     obtenerDatos();
   }, []);
 
-  const handleVoltearCarta = (index) => {
-    setVehiculos((prevVehiculos) => {
-      const updatedVehiculos = [...prevVehiculos];
-      updatedVehiculos[index].isFlipped = !updatedVehiculos[index].isFlipped;
-      return updatedVehiculos;
-    });
-  };
+ 
 
-  const vehiculosFiltrados = vehiculos.filter((vehiculo) => vehiculo.image && vehiculo.model && vehiculo.brand);
+  const vehiculosFiltrados = vehiculos.filter(
+    (vehiculo) => vehiculo.image && vehiculo.model && vehiculo.brand
+  );
+
+  const itemsPerPage = 9;
+  const totalPages = Math.ceil(vehiculosFiltrados.length / itemsPerPage);
+
+  const visiblePageIndexes = Array.from({ length: totalPages }).map((_, index) => index * itemsPerPage);
 
   return (
     <div className="max-w-[1240px] mx-auto font-Tektur px-4 text-black">
-      <h2 className="text-2xl my-4" id='catalog'>Listado de vehículos</h2>
+      <h2 className="text-2xl my-4" id="catalog">
+        Listado de vehículos
+      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shadow-xl">
-        {vehiculosFiltrados.slice(currentIndex, currentIndex + 9).map((vehiculo, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shadow-xl relative">
+        {vehiculosFiltrados.slice(currentIndex, currentIndex + itemsPerPage).map((vehiculo, index) => (
           <ReactCardFlip
             key={vehiculo.model}
-            flipDirection='horizontal'
-            isFlipped={vehiculo.isFlipped || false}
+            flipDirection="horizontal"
+            isFlipped={isFlipped}
           >
+            {/* Contenido frontal de la tarjeta */}
             <div
               className="card border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-10"
-              onClick={() => handleVoltearCarta(index)}
+              onClick={() => flipCard(index)}
             >
               <img
                 src={vehiculo.image}
@@ -62,7 +66,7 @@ const Catalogo = () => {
                 className="w-full shadow-md h-48 object-cover bg-white mix-blend-multiply filter"
               />
               <div className="p-4 block">
-                <div className='flex'>
+                <div className="flex">
                   <h3 className="text-lg font-bold">{vehiculo.brand}</h3>
                   <img
                     src={vehiculo.logo}
@@ -71,13 +75,13 @@ const Catalogo = () => {
                   />
                 </div>
                 <p className="text-sm mt-2">{vehiculo.model}</p>
-                {/* Otros detalles del vehículo */}
               </div>
             </div>
 
+            {/* Contenido trasero de la tarjeta */}
             <div
               className="card card-back border border-solid cursor-pointer group-hover:rotate-y-180 duration-500 border-opacity-50 p-4  shadow-xl bg-white rounded-lg overflow-hidden block m-10"
-              onClick={() => handleVoltearCarta(index)}
+              onClick={() =>  flipCard(index)}
             >
               <p className="text-sm mt-2"> Marca: {vehiculo.brand}</p>
               <p className="text-sm mt-2"> Modelo: {vehiculo.model}</p>
@@ -86,25 +90,48 @@ const Catalogo = () => {
             </div>
           </ReactCardFlip>
         ))}
-        <div className="absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-1 bg-black/20 text-white cursor-pointer">
-        <BsChevronCompactLeft onClick={prevSlide} size={30} />
+
       </div>
 
-      <div className="absolute top-[50%] -translate-x-0 translate-y-[-50%] right-5 text-2xl rounded-full p-1 bg-black/20 text-white cursor-pointer">
-        <BsChevronCompactRight onClick={nextSlide} size={30} />
-      </div>
-      </div>
-      <div className='flex top-4 justify-center py-2'>
-        {slides.map((slide, slideIndex) => (
-          <div
-            key={slideIndex}
-            onClick={() => goToSlide(slideIndex)}
-            className='text-2xl cursor-pointer'
-          >
-            <RxDotFilled />
-          </div>
-        ))}
-      </div>
+       {/* Páginas */}
+       <div className="flex flex-wrap justify-center items-center mt-4 w-90%">
+    {/* Botón para retroceder una página */}
+    <div
+      className="text-2xl cursor-pointer mx-2 text-gray-500"
+      onClick={() => setCurrentIndex((prevIndex) => Math.max(0, prevIndex - 1))}
+    >
+      &lt; Anterior
+    </div>
+
+    {/* Páginas */}
+    {Array.from({ length: Math.ceil(vehiculosFiltrados.length / itemsPerPage) }).map(
+      (page, i) => (
+        <div
+          key={i}
+          onClick={() => setCurrentIndex(i * itemsPerPage)}
+          className={`text-2xl cursor-pointer mx-2 ${
+            i * itemsPerPage === currentIndex ? 'text-black' : 'text-gray-500'
+          }`}
+        >
+          {i + 1}
+        </div>
+      )
+    )}
+
+    {/* Botón para avanzar una página */}
+    <div
+      className="text-2xl cursor-pointer mx-2 text-gray-500"
+      onClick={() =>
+        setCurrentIndex((prevIndex) =>
+          Math.min(prevIndex + itemsPerPage, vehiculosFiltrados.length - itemsPerPage)
+        )
+      }
+    >
+      Siguiente &gt;
+    </div>
+  </div>
+
+      
     </div>
   );
 };
